@@ -6,6 +6,7 @@ from Queue import Queue
 from pprint import pprint
 
 def get_ip():
+	# use socket to grab ip address, required for url 
 	ip_address = socket.gethostbyname(socket.gethostname())
 	return ip_address
 
@@ -49,13 +50,12 @@ def get_data(jobTitle,ip_address,api_id,api_key):
 	return max_salary
 
 def replace_space(job_title):
-	# formatting for url
+	# formatting title for url
 	return job_title.replace(' ', '%20')
 
 def get_results(job_titles,ran=4):
 
 	ip_address = get_ip()
-
 	api_id,api_key = get_enviorn_key_id()
 
 	# initialize dictionary and populate q

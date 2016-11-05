@@ -10,9 +10,9 @@ Before you start, set your enviornment variables in terminal:
 
 Key features: 
 
--> Job Titles: array of strings. include titles of jobs to be run.
+	Job Titles: array of strings. include titles of jobs to be run.
 
--> Most frequent vs. Highest salary: in get_data function, choose if you want to return data based on highest median salary or most likely career projection based on statistics.
+	Most frequent vs. Highest salary: in get_data function, choose if you want to return data based on highest median salary or most likely career projection based on statistics.
 
--> Number of steps into career: some career titles, "director," may not result in a career projection result.
+	Number of steps into career: some career titles, "director," may not result in a career projection result.
 
