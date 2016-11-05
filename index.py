@@ -45,9 +45,11 @@ def get_data(jobTitle):
 	json_data = json.load(response) 
 	result = json_data['response']['results']
 
-	most_freq = result[0]
-	
-	return most_freq
+	# most_freq = result[0]
+	# return most_freq
+
+	max_salary = max(result, key=lambda s:s['medianSalary'])
+	return max_salary
 
 def replace_space(job_title):
 	return job_title.replace(' ', '%20')
@@ -61,13 +63,14 @@ def get_results():
 		replaced_i = replace_space(i)
 		q.put(replaced_i)
 
-	for i in range(5):
+	for i in range(4):
 		for job in job_titles:
 			most_freq_job = get_data(q.get())
 			next_job_title = most_freq_job['nextJobTitle']
 			replaced = replace_space(next_job_title)
 			q.put(replaced)
 			res[job].append(most_freq_job)
+	
 
 	pprint(res)
 	print q.qsize()
