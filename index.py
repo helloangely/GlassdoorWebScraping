@@ -11,7 +11,7 @@ def get_ip():
 
 def get_enviorn_key_id():
 	'''
-	Set your enviornment variables in a unix terminal:
+	Set your enviornment variables in terminal:
 
 	$ export GLASSDOOR_API_ID="YOUR_API_ID"
 	$ export GLASSDOOR_API_KEY="YOUR_API_KEY"
@@ -21,14 +21,10 @@ def get_enviorn_key_id():
 
 	return api_id,api_key
 
-def get_data(jobTitle):
+def get_data(jobTitle,ip_address,api_id,api_key):
 	'''
 	Get next job progression
 	'''
-
-	ip_address = get_ip()
-
-	api_id,api_key = get_enviorn_key_id()
 
 	action = 'jobs-prog'
 	query = 'pharmaceuticals'
@@ -45,6 +41,7 @@ def get_data(jobTitle):
 	json_data = json.load(response) 
 	result = json_data['response']['results']
 
+	# uncomment lines below to return highest frequency of next career option
 	# most_freq = result[0]
 	# return most_freq
 
@@ -52,30 +49,44 @@ def get_data(jobTitle):
 	return max_salary
 
 def replace_space(job_title):
+	# formatting for url
 	return job_title.replace(' ', '%20')
 
-def get_results():
+def get_results(job_titles,ran=4):
+
+	ip_address = get_ip()
+
+	api_id,api_key = get_enviorn_key_id()
+
+	# initialize dictionary and populate q
 	q = Queue()
-	job_titles=['engineer','systems engineer','safety representative','web applications developer','electrical engineer','journalist','marketing analyst', 'software engineer', 'architect']
 	res = {}
 	for i in job_titles:
 		res[i]=[]
 		replaced_i = replace_space(i)
 		q.put(replaced_i)
 
-	for i in range(4):
+	# get new data and populate q
+	for i in range(ran):
 		for job in job_titles:
-			most_freq_job = get_data(q.get())
+			most_freq_job = get_data(q.get(),ip_address,api_id,api_key)
 			next_job_title = most_freq_job['nextJobTitle']
 			replaced = replace_space(next_job_title)
 			q.put(replaced)
 			res[job].append(most_freq_job)
 	
+	return res
 
-	pprint(res)
-	print q.qsize()
+def main():
+	job_titles=['engineer','systems engineer','safety representative','web applications developer','electrical engineer','journalist','marketing analyst', 'software engineer', 'architect']
+	num_runs=4
+	final_res = get_results(job_titles,num_runs)
+	pprint(final_res)
 
-get_results()
+main()
+
+
+
 
 
 
