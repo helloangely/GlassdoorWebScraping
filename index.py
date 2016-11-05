@@ -2,16 +2,31 @@ import urllib2
 import json
 import subprocess
 import socket
+import os
 
 
 def get_ip():
 	ip_address = socket.gethostbyname(socket.gethostname())
 	return ip_address
 
-def get_data(api_id,api_key):
+def get_enviorn_key_id():
+	'''
+	Set your enviornment variables in a unix terminal:
+
+	$ export GLASSDOOR_API_ID="YOUR_API_ID"
+	$ export GLASSDOOR_API_KEY="YOUR_API_KEY"
+	'''
+	api_id = os.getenv('GLASSDOOR_API_ID')
+	api_key = os.getenv('GLASSDOOR_API_KEY')
+
+	return api_id,api_key
+
+def get_data():
 
 	ip_address = get_ip()
-	
+
+	api_id,api_key = get_enviorn_key_id()
+
 	action = 'employers'
 	query = 'pharmaceuticals'
 	base_url = 'http://api.glassdoor.com/api/api.htm?'
@@ -22,9 +37,9 @@ def get_data(api_id,api_key):
 
 	req = urllib2.Request(url,headers=hdr)
 	response = urllib2.urlopen(req)
-	data = response.read()
+	json_data = json.load(response) 
 
-	print type(data)
+	print json_data
 
 get_data()
 
